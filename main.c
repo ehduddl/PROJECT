@@ -25,7 +25,7 @@
 int isMet(int Patient,int Propagator);
 
 int trackInfester(int patient_no);
-//int trackInfester(int patient_no, int *detected_time, int *place);
+
 
 int main(int argc, const char * argv[]) {
     
@@ -117,7 +117,7 @@ fp = fopen("patientInfo_sample.txt","r");
 			        printf("장소이름을 입력하시오: ");
 			        scanf("%s",&entry_place);
 			        
-			        for(pIndex=0;pIndex<ifctdb_len();pIndex++)//================================================================
+			        for(pIndex=0;pIndex<ifctdb_len();pIndex++)
             		{
             			ifct_element=ifctdb_getData(pIndex);
             	
@@ -151,7 +151,7 @@ fp = fopen("patientInfo_sample.txt","r");
             		printf("최대나이를 입력하시오.");
             		scanf("%d",&max_age);
             		
-            		for(pIndex=0;pIndex<ifctdb_len();pIndex++)//================================================================
+            		for(pIndex=0;pIndex<ifctdb_len();pIndex++)
             		{
             			ifct_element=ifctdb_getData(pIndex);
 					if(ifctele_getAge(ifct_element)>=min_age&&ifctele_getAge(ifct_element)<=max_age)
@@ -220,8 +220,10 @@ fp = fopen("patientInfo_sample.txt","r");
                     int min_metTime=10000;
                     int i;
                     
-					for (i=0;i<ifctdb_len();i++)
-                    {
+					for (i=0;(i<ifctdb_len());i++)
+					{
+						if(i!=patient_no)
+						{
 	                    {
                             met_time = isMet(patient_no,i);
                             if ( met_time > 0) //만났다면
@@ -236,10 +238,11 @@ fp = fopen("patientInfo_sample.txt","r");
                 
                     
 					}
+					}
+                    
 				
 					return Propagator;
-                }
-        
+                }        
             	
             	int track_ID;
 				int Current_Patient, Propagator, First_Preachers;
@@ -250,15 +253,26 @@ fp = fopen("patientInfo_sample.txt","r");
 				
 				Current_Patient = track_ID;
 				
-				//while (Current_Patient>=0)//while (Current_Patient!=NULL)
+				while (Current_Patient>-1)
                 {
                     Propagator = trackInfester(Current_Patient);
-                    if (Propagator>0)
-                    printf("%i 환자는 %i 환자에게 전파됨\n",Current_Patient,Propagator);
+                    
+					if (Propagator>-1)
+                    {
+                    	printf("%i 환자는 %i 환자에게 전파됨\n",Current_Patient,Propagator);
+                        Current_Patient = Propagator;
+					}
                     
 					else
-                    First_Preachers =Current_Patient;
-                    Current_Patient=Propagator;
+                    {
+                    	First_Preachers =Current_Patient;
+                    	printf("%d는 최초전파자이다.\n",First_Preachers);
+                    	break;
+					}
+					
+					
+                    
+				
                 }
             
             	
