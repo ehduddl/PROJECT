@@ -26,6 +26,8 @@ int isMet(int Patient,int Propagator);
 
 int trackInfester(int patient_no);
 
+int Met_place(int Patient);
+
 
 int main(int argc, const char * argv[]) {
     
@@ -37,7 +39,7 @@ void *ifct_element;
 int pIndex, age, time;
 int placeHist[N_HISTORY];
 FILE*fp;
-fp = fopen("patientInfo_sample.txt","r");
+fp = fopen("patientInfo_prb5.txt","r");
 
 
 
@@ -97,7 +99,7 @@ fp = fopen("patientInfo_sample.txt","r");
             case MENU_PATIENT:
             	
             	{
-            		printf("조사할 환자를 선택하시오.");
+            		printf("\n조사할 환자를 선택하시오.");
             		scanf("%d",&pIndex);
             		
             		ifct_element=ifctdb_getData(pIndex);
@@ -115,7 +117,7 @@ fp = fopen("patientInfo_sample.txt","r");
             	{
             		int i,num=0,a;
 					char entry_place[100];
-			        printf("장소이름을 입력하시오: ");
+			        printf("\n장소이름을 입력하시오: ");
 			        scanf("%s",&entry_place);
 			        
 			        for(pIndex=0;pIndex<ifctdb_len();pIndex++)
@@ -149,9 +151,9 @@ fp = fopen("patientInfo_sample.txt","r");
 						
 					int max_age, min_age,i;
 					int num=0; 
-					printf("최소나이를 입력하시오.");
+					printf("\n최소나이를 입력하시오.");
 					scanf("%d",&min_age);
-            		printf("최대나이를 입력하시오.");
+            		printf("\n최대나이를 입력하시오.");
             		scanf("%d",&max_age);
             		
             		for(pIndex=0;pIndex<ifctdb_len();pIndex++)
@@ -177,7 +179,7 @@ fp = fopen("patientInfo_sample.txt","r");
             	
             {
             	
-            
+           
 			int isMet(int Patient,int Propagator)
                 {
 	                int i,j;
@@ -206,6 +208,7 @@ fp = fopen("patientInfo_sample.txt","r");
 				                if (place_i == place_j)//현재환자와 대상환자가 같은 공간에 있음 
 				                {
                                     meet_time = time;
+                    
                                 }
                                 
                                 
@@ -218,12 +221,12 @@ fp = fopen("patientInfo_sample.txt","r");
                 }
 			
 			
+				int min_metTime=10000;
 				
 				int trackInfester(int patient_no)
                 {
    
                     int met_time,Propagator=-1;
-                    int min_metTime=10000;
                     int i;
                     
 					for (i=0;(i<ifctdb_len());i++)
@@ -250,12 +253,20 @@ fp = fopen("patientInfo_sample.txt","r");
 					return Propagator;
                 }        
                 
+                int Met_place(int Patient)
+                {
+                	
+                	ifct_element=ifctdb_getData(Patient); 
+					
+					ifctele_getHistPlaceIndex(ifct_element, N_HISTORY-(ifctele_getinfestedTime(ifct_element)-min_metTime+1));
+                	
+				}
                 
             	
             	int track_ID;
 				int Current_Patient, Propagator, First_Preachers;
 				 
-				printf("조사할 환자를 입력하시오 : \n");
+				printf("\n조사할 환자를 입력하시오 : ");
             	scanf("%d",&track_ID);
 				
 				
@@ -266,16 +277,16 @@ fp = fopen("patientInfo_sample.txt","r");
                     Propagator = trackInfester(Current_Patient);
                     
 					if (Propagator>-1)
-                    printf("--> [TRACKING] patient %d is infected by %d \n",Current_Patient,Propagator);
+                    printf("--> [TRACKING] patient %d is infected by %d(time : %d, place : %s)\n",Current_Patient,Propagator,min_metTime,ifctele_getPlaceName(Met_place(Current_Patient)));
 								
                     
 					else
                     {
                     	First_Preachers = Current_Patient;
 						if(track_ID==First_Preachers)
-						printf("%d is the first infecter!!!\n",track_ID,First_Preachers);
+						printf("\n%d is the first infecter!!!\n",track_ID,First_Preachers);
 						else
-						printf("The infecter of %d is %d\n",track_ID,First_Preachers);
+						printf("\nThe infecter of %d is %d\n",track_ID,First_Preachers);
 					}
 					
 					Current_Patient = Propagator;
