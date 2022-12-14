@@ -162,10 +162,10 @@ void ifsele_printElement(void*obj)
 int i;
 ifs_ele_t* ptr = (ifs_ele_t*)obj;
 
-printf("Age : %i\n",ptr->age);
-printf("Time : %i\n",ptr->detected_time);
+printf("Patient age : %i\n",ptr->age);
+printf("Detected time : %i\n",ptr->detected_time);
 
-printf("PLACE : ");
+printf("Path History : ");
 for(i=0;i<N_HISTORY;i++)
 {
 printf("%s(%d)  ",ifctele_getPlaceName(ptr->place[i]),ptr->detected_time-(N_HISTORY-(i+1)));

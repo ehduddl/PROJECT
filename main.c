@@ -103,8 +103,9 @@ fp = fopen("patientInfo_sample.txt","r");
             		ifct_element=ifctdb_getData(pIndex);
             		
 					printf("\n--------[환자정보]-------\n");
-            		printf("Index : %d\n",pIndex);
-            		ifsele_printElement(ifct_element);
+            		printf("Patient index : %d\n",pIndex);
+					ifsele_printElement(ifct_element);
+					printf("\n-------------------------\n");
 			       	
 				}
             	
@@ -112,7 +113,7 @@ fp = fopen("patientInfo_sample.txt","r");
                 
             case MENU_PLACE:
             	{
-            		int i,num,a;
+            		int i,num=0,a;
 					char entry_place[100];
 			        printf("장소이름을 입력하시오: ");
 			        scanf("%s",&entry_place);
@@ -124,14 +125,15 @@ fp = fopen("patientInfo_sample.txt","r");
 				    if (strcmp(entry_place,ifctele_getPlaceName(ifctele_getHistPlaceIndex(ifct_element,N_HISTORY-1)))==0) 
             		{
             			printf("\n--------[환자정보]-------\n");
-            		    printf("Index : %d\n",pIndex);
+            		    printf("Patient index : %d\n",pIndex);
 						ifsele_printElement(ifct_element);
+						printf("\n-------------------------\n");
+						num++;
 					}
-				
 					
 					}
 			        
-			        
+			        printf("\nThere are %d patient detected in %s\n",num,entry_place);
 				}
 			
 			        
@@ -145,7 +147,8 @@ fp = fopen("patientInfo_sample.txt","r");
             		
 					{
 						
-					int max_age, min_age,i; 
+					int max_age, min_age,i;
+					int num=0; 
 					printf("최소나이를 입력하시오.");
 					scanf("%d",&min_age);
             		printf("최대나이를 입력하시오.");
@@ -157,11 +160,14 @@ fp = fopen("patientInfo_sample.txt","r");
 					if(ifctele_getAge(ifct_element)>=min_age&&ifctele_getAge(ifct_element)<=max_age)
             		{
             		    printf("\n--------[환자정보]-------\n");
-            		    printf("Index : %d\n",pIndex);
+            		    printf("Patient index : %d\n",pIndex);
 						ifsele_printElement(ifct_element);
+						printf("\n-------------------------\n");
+						num++;
 					}
 					
 					}
+					printf("\nThere are %d whose age is between %d and %d\n",num,min_age,max_age);
 					}
 					
 					
@@ -243,11 +249,13 @@ fp = fopen("patientInfo_sample.txt","r");
 				
 					return Propagator;
                 }        
+                
+                
             	
             	int track_ID;
 				int Current_Patient, Propagator, First_Preachers;
 				 
-				printf("조사할 환자를 입력하시오 : ");
+				printf("조사할 환자를 입력하시오 : \n");
             	scanf("%d",&track_ID);
 				
 				
@@ -258,17 +266,19 @@ fp = fopen("patientInfo_sample.txt","r");
                     Propagator = trackInfester(Current_Patient);
                     
 					if (Propagator>-1)
-                    {
-                    	printf("%i 환자는 %i 환자에게 전파됨\n",Current_Patient,Propagator);
-                        Current_Patient = Propagator;
-					}
+                    printf("--> [TRACKING] patient %d is infected by %d \n",Current_Patient,Propagator);
+								
                     
 					else
                     {
-                    	First_Preachers =Current_Patient;
-                    	printf("%d는 최초전파자이다.\n",First_Preachers);
-                    	break;
+                    	First_Preachers = Current_Patient;
+						if(track_ID==First_Preachers)
+						printf("%d is the first infecter!!!\n",track_ID,First_Preachers);
+						else
+						printf("The infecter of %d is %d\n",track_ID,First_Preachers);
 					}
+					
+					Current_Patient = Propagator;
 					
 					
                     
