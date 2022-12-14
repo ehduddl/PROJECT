@@ -25,6 +25,7 @@
 int isMet(int Patient,int Propagator);
 
 int trackInfester(int patient_no);
+//int trackInfester(int patient_no, int *detected_time, int *place);
 
 int main(int argc, const char * argv[]) {
     
@@ -170,38 +171,54 @@ fp = fopen("patientInfo_sample.txt","r");
             	
             {
             	
-                
-            /*
-				int track_ID;
-				int Current_Patient, Propagator, First_Preachers;
-				 
-				printf("조사할 환자를 입력하시오 : ");
-            	scanf("%d",&track_ID);
-				
-				
-				Current_Patient = track_ID;
-				
-				while (Current_Patient>0)//while (Current_Patient!=NULL)
+            
+			int isMet(int Patient,int Propagator)
                 {
-                    Propagator = trackInfester(track_ID);
-                    if (Propagator>0)
-                    printf("%i 환자는 %i 환자에게 전파됨\n",track_ID,Propagator);
-                    
-					else
-                    First_Preachers =track_ID;
-                    track_ID=Propagator;
+	                int i,j;
+					int place_i,place_j;
+					int a,b;//현재환자,대상환자 감염 시점 
+					int meet_time=-1,time;
+					
+					for (i=0;i<N_HISTORY;i++)
+					{
+					    ifct_element=ifctdb_getData(Patient);//현재환자 정보 불러옴 
+						a = ifctele_getinfestedTime(ifct_element);//현재환자 감염시점 불러옴 
+						time = a-(N_HISTORY-(i+1));//i번째 시점계산 
+						place_i=ifctele_getHistPlaceIndex(ifct_element,i);//i번째 이동 장소
+	    
+	    
+			            ifct_element=ifctdb_getData(Propagator);// 대상 환자 정보 불러옴
+						b=ifctele_getinfestedTime(ifct_element);//대상 환자 감염시점 불러옴 
+			
+		                for(j=N_HISTORY-2;j<N_HISTORY;j++) 
+                        {
+				            if(time==b-(N_HISTORY-(j+1)))//현재환자와 대상환자 j번째에서 만남 
+				
+				            {
+					            place_j=ifctele_getHistPlaceIndex(ifct_element,j);// 대상환자의 j번째 장소 
+				
+				                if (place_i == place_j)//현재환자와 대상환자가 같은 공간에 있음 
+				                {
+                                    meet_time = time;
+                                }
+                                
+                                
+				            }
+				
+			            }	
+                    }
+	                
+					return meet_time;
                 }
 			
 			
-			*/
-				
-				
 				
 				int trackInfester(int patient_no)
                 {
    
-                    int met_time,Propagator;
+                    int met_time,Propagator=-1;
                     int min_metTime=10000;
+                    int i;
                     
 					for (i=0;i<ifctdb_len();i++)
                     {
@@ -216,58 +233,39 @@ fp = fopen("patientInfo_sample.txt","r");
                                 }
                             }
                         }
+                
                     
 					}
-					if (Propagator>0)
+				
 					return Propagator;
-					
-                    else return (-1);
                 }
         
             	
-            	//printf("%d",trackInfester(0));
-            	
-            	int isMet(int Patient,int Propagator)
+            	int track_ID;
+				int Current_Patient, Propagator, First_Preachers;
+				 
+				printf("조사할 환자를 입력하시오 : ");
+            	scanf("%d",&track_ID);
+				
+				
+				Current_Patient = track_ID;
+				
+				//while (Current_Patient>=0)//while (Current_Patient!=NULL)
                 {
-	                int i,j;
-					int place_i,place_j;
-					int a,b;//현재환자,대상환자 감염 시점 
-					int meet_time,time;
-					
-					for (i=2;i<N_HISTORY;i++)
-					{
-					    ifct_element=ifctdb_getData(Patient);//현재환자 정보 불러옴 
-						a = ifctele_getinfestedTime(ifct_element);//현재환자 감염시점 불러옴 
-						time = a-(N_HISTORY-(i+1));//i번째 시점계산 
-						place_i=ifctele_getHistPlaceIndex(ifct_element,i);//i번째 이동 장소
-	    
-	    
-			            ifct_element=ifctdb_getData(Propagator);// 대상 환자 정보 불러옴
-						b=ifctele_getinfestedTime(ifct_element);//대상 환자 감염시점 불러옴 
-			
-		                for(j=0;j<N_HISTORY;j++) 
-                        {
-				            if(time==b-(N_HISTORY-(j+1)))//현재환자와 대상환자 j번째에서 만남 
-				
-				            {
-					            place_j=ifctele_getHistPlaceIndex(ifct_element,j);// 대상환자의 j번째 장소 
-				
-				                if (place_i == place_j)//현재환자와 대상환자가 같은 공간에 있음 
-				                {
-                                    meet_time = time;
-                                }
-				            }
-				
-			            }	
-                    }
-	                
-					return meet_time;
+                    Propagator = trackInfester(Current_Patient);
+                    if (Propagator>0)
+                    printf("%i 환자는 %i 환자에게 전파됨\n",Current_Patient,Propagator);
+                    
+					else
+                    First_Preachers =Current_Patient;
+                    Current_Patient=Propagator;
                 }
+            
             	
-            	
-			printf("\n%d",isMet(0,1));
-			
+        
+				
 				}	
+			
             	
 				                    
                 break;
