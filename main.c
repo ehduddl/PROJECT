@@ -33,13 +33,13 @@ int main(int argc, const char * argv[]) {
     
    
    
-int i,j;
-int menu_selection;
-void *ifct_element;    
-int pIndex, age, time;
-int placeHist[N_HISTORY];
-FILE*fp;
-fp = fopen("patientInfo_prb5.txt","r");
+	int i,j;
+	int menu_selection;
+	void *ifct_element;    
+	int pIndex, age, time;
+	int placeHist[N_HISTORY];
+	FILE*fp;
+	fp = fopen("patientInfo_prb5.txt","r");
 
 
 
@@ -124,15 +124,15 @@ fp = fopen("patientInfo_prb5.txt","r");
             		{
             			ifct_element=ifctdb_getData(pIndex);
             	
-				    if (strcmp(entry_place,ifctele_getPlaceName(ifctele_getHistPlaceIndex(ifct_element,N_HISTORY-1)))==0) 
-            		{
-            			printf("\n--------[환자정보]-------\n");
-            		    printf("Patient index : %d\n",pIndex);
-						ifsele_printElement(ifct_element);
-						printf("\n-------------------------\n");
-						num++;
-					}
-					
+					    if (strcmp(entry_place,ifctele_getPlaceName(ifctele_getHistPlaceIndex(ifct_element,N_HISTORY-1)))==0) 
+	            		{
+	            			printf("\n--------[환자정보]-------\n");
+	            		    printf("Patient index : %d\n",pIndex);
+							ifsele_printElement(ifct_element);
+							printf("\n-------------------------\n");
+							num++;
+						}
+						
 					}
 			        
 			        printf("\nThere are %d patient detected in %s\n",num,entry_place);
@@ -147,40 +147,42 @@ fp = fopen("patientInfo_prb5.txt","r");
                 
             case MENU_AGE:
             		
-					{
-						
+				{
+					
 					int max_age, min_age,i;
 					int num=0; 
+					
 					printf("\n최소나이를 입력하시오.");
 					scanf("%d",&min_age);
-            		printf("\n최대나이를 입력하시오.");
-            		scanf("%d",&max_age);
-            		
-            		for(pIndex=0;pIndex<ifctdb_len();pIndex++)
-            		{
-            			ifct_element=ifctdb_getData(pIndex);
-					if(ifctele_getAge(ifct_element)>=min_age&&ifctele_getAge(ifct_element)<=max_age)
-            		{
-            		    printf("\n--------[환자정보]-------\n");
-            		    printf("Patient index : %d\n",pIndex);
-						ifsele_printElement(ifct_element);
-						printf("\n-------------------------\n");
-						num++;
-					}
+	        		
+					printf("\n최대나이를 입력하시오.");
+	        		scanf("%d",&max_age);
+	        		
+	        		for(pIndex=0;pIndex<ifctdb_len();pIndex++)
+	        		{
+	        			ifct_element=ifctdb_getData(pIndex);
+						if(ifctele_getAge(ifct_element)>=min_age&&ifctele_getAge(ifct_element)<=max_age)
+		        		{
+		        		    printf("\n--------[환자정보]-------\n");
+		        		    printf("Patient index : %d\n",pIndex);
+							ifsele_printElement(ifct_element);
+							printf("\n-------------------------\n");
+							
+							num++;
+						}
 					
 					}
 					printf("\nThere are %d whose age is between %d and %d\n",num,min_age,max_age);
-					}
-					
+				}
+				
 					
                 break;
                 
             case MENU_TRACK:
             	
             {
-            	
-           
-			int isMet(int Patient,int Propagator)
+           	
+           		int isMet(int Patient,int Propagator)
                 {
 	                int i,j;
 					int place_i,place_j;
@@ -194,27 +196,21 @@ fp = fopen("patientInfo_prb5.txt","r");
 						time = a-(N_HISTORY-(i+1));//i번째 시점계산 
 						place_i=ifctele_getHistPlaceIndex(ifct_element,i);//i번째 이동 장소
 	    
-	    
-			            ifct_element=ifctdb_getData(Propagator);// 대상 환자 정보 불러옴
+	    			    ifct_element=ifctdb_getData(Propagator);// 대상 환자 정보 불러옴
 						b=ifctele_getinfestedTime(ifct_element);//대상 환자 감염시점 불러옴 
 			
 		                for(j=N_HISTORY-2;j<N_HISTORY;j++) 
                         {
 				            if(time==b-(N_HISTORY-(j+1)))//현재환자와 대상환자 j번째에서 만남 
-				
-				            {
+							{
 					            place_j=ifctele_getHistPlaceIndex(ifct_element,j);// 대상환자의 j번째 장소 
 				
 				                if (place_i == place_j)//현재환자와 대상환자가 같은 공간에 있음 
 				                {
                                     meet_time = time;
-                    
                                 }
-                                
-                                
-				            }
-				
-			            }	
+                            }
+				        }	
                     }
 	                
 					return meet_time;
@@ -229,11 +225,10 @@ fp = fopen("patientInfo_prb5.txt","r");
                     int met_time,Propagator=-1;
                     int i;
                     
-					for (i=0;(i<ifctdb_len());i++)
+					for (i=0;i<ifctdb_len();i++)
 					{
 						if(i!=patient_no)
 						{
-	                    {
                             met_time = isMet(patient_no,i);
                             if ( met_time > 0) //만났다면
                             {
@@ -244,12 +239,8 @@ fp = fopen("patientInfo_prb5.txt","r");
                                 }
                             }
                         }
-                
+                    }
                     
-					}
-					}
-                    
-				
 					return Propagator;
                 }        
                 
@@ -289,23 +280,14 @@ fp = fopen("patientInfo_prb5.txt","r");
 						printf("\nThe infecter of %d is %d\n",track_ID,First_Preachers);
 					}
 					
-					Current_Patient = Propagator;
-					
-					
-                    
-				
-                }
-            
-            	
-        
-				
-				}	
-			
-            	
-				                    
+					Current_Patient = Propagator;		                    			
+                }		
+			}	
+			            					                    
                 break;
                 
-            default:
+            
+			default:
                 printf("[ERROR Wrong menu selection! (%i), please choose between 0 ~ 4\n", menu_selection);
                 break;
         }

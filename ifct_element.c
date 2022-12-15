@@ -116,19 +116,20 @@ typedef struct ifs_ele{
 
 void* ifctele_genElement(int index, int age, unsigned int detected_time, int history_place[N_HISTORY])
 {
-		ifs_ele_t* ptr;
-		
-		int i;
-		ptr = (ifs_ele_t*)malloc(sizeof(ifs_ele_t));
-	    ptr->index = index;
-		ptr->age=age;
-		ptr->detected_time=detected_time;
-		for(i=0;i<N_HISTORY;i++)
-		{
-			ptr->place[i]=history_place[i];
-		}
+	ifs_ele_t* ptr;
 	
-return ptr;
+	int i;
+	ptr = (ifs_ele_t*)malloc(sizeof(ifs_ele_t));
+    ptr->index = index;
+	ptr->age=age;
+	ptr->detected_time=detected_time;
+	
+	for(i=0;i<N_HISTORY;i++)
+	{
+		ptr->place[i]=history_place[i];
+	}
+	
+	return ptr;
 }
 
 
@@ -159,18 +160,18 @@ int ifctele_getHistPlaceIndex(void* obj, int index)
 
 void ifsele_printElement(void*obj)
 {
-int i;
-ifs_ele_t* ptr = (ifs_ele_t*)obj;
-
-printf("Patient age : %i\n",ptr->age);
-printf("Detected time : %i\n",ptr->detected_time);
-
-printf("Path History : ");
-for(i=0;i<N_HISTORY;i++)
-{
-printf("%s(%d)  ",ifctele_getPlaceName(ptr->place[i]),ptr->detected_time-(N_HISTORY-(i+1)));
-}
-printf("\n");
+	int i;
+	ifs_ele_t* ptr = (ifs_ele_t*)obj;
+	
+	printf("Patient age : %i\n",ptr->age);
+	printf("Detected time : %i\n",ptr->detected_time);
+	
+	printf("Path History : ");
+	for(i=0;i<N_HISTORY;i++)
+	{
+		printf("%s(%d)  ",ifctele_getPlaceName(ptr->place[i]),ptr->detected_time-(N_HISTORY-(i+1)));
+	}
+	printf("\n");
 }
 
 
