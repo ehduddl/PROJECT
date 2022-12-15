@@ -98,12 +98,13 @@ char countryName[N_PLACE+1][MAX_PLACENAME] =
     "Unrecognized"
 };
 
-char* ifctele_getPlaceName(int placeIndex)
+char* ifctele_getPlaceName(int placeIndex)//환자 이동장소(숫자) 문자열로 변환 
 {
 	return countryName[placeIndex];
 }
 
-typedef struct ifs_ele{
+typedef struct ifs_ele//구조체 형성 
+{
 	
 	int      index;
 	int      age;
@@ -114,7 +115,7 @@ typedef struct ifs_ele{
 
 
 
-void* ifctele_genElement(int index, int age, unsigned int detected_time, int history_place[N_HISTORY])
+void* ifctele_genElement(int index, int age, unsigned int detected_time, int history_place[N_HISTORY])//구조체에 정보 입력 
 {
 	ifs_ele_t* ptr;
 	
@@ -133,7 +134,7 @@ void* ifctele_genElement(int index, int age, unsigned int detected_time, int his
 }
 
 
-int ifctele_getAge(void* obj)
+int ifctele_getAge(void* obj)// 환자 나이 불러오기 
 {
 	ifs_ele_t*ptr = (ifs_ele_t*)obj;
 	
@@ -141,7 +142,7 @@ int ifctele_getAge(void* obj)
 	
 }
 
-unsigned int ifctele_getinfestedTime(void* obj)
+unsigned int ifctele_getinfestedTime(void* obj)//환자 감염시점 불러오기 
 {
 	ifs_ele_t*ptr = (ifs_ele_t*)obj;
 	
@@ -149,7 +150,7 @@ unsigned int ifctele_getinfestedTime(void* obj)
 	
 }
 
-int ifctele_getHistPlaceIndex(void* obj, int index)
+int ifctele_getHistPlaceIndex(void* obj, int index)//환자 index번째 이동 장소 불러오기 
 {
 	ifs_ele_t*ptr = (ifs_ele_t*)obj;
 	
@@ -158,7 +159,7 @@ int ifctele_getHistPlaceIndex(void* obj, int index)
 }
 
 
-void ifsele_printElement(void*obj)
+void ifsele_printElement(void*obj)//환자 정보 출력하기 
 {
 	int i;
 	ifs_ele_t* ptr = (ifs_ele_t*)obj;
@@ -167,9 +168,9 @@ void ifsele_printElement(void*obj)
 	printf("Detected time : %i\n",ptr->detected_time);
 	
 	printf("Path History : ");
-	for(i=0;i<N_HISTORY;i++)
+	for(i=0;i<N_HISTORY;i++)//이동장소 수 만큼 반복 
 	{
-		printf("%s(%d)  ",ifctele_getPlaceName(ptr->place[i]),ptr->detected_time-(N_HISTORY-(i+1)));
+		printf("%s(%d)  ",ifctele_getPlaceName(ptr->place[i]),ptr->detected_time-(N_HISTORY-(i+1)));//detected_time-(N_HISTORY-(i+1)=장소에 있던 시점 계산 
 	}
 	printf("\n");
 }
