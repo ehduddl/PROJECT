@@ -96,7 +96,7 @@ int main(int argc, const char * argv[]) {
                 printf("Exiting the program... Bye bye.\n");
                 break;
                 
-            case MENU_PATIENT:
+            case MENU_PATIENT://특정 환자에 대한 정보 출력
             	
             	{
             		printf("\n조사할 환자를 선택하시오.");
@@ -113,7 +113,7 @@ int main(int argc, const char * argv[]) {
             	
                 break;
                 
-            case MENU_PLACE:
+            case MENU_PLACE://특정 장소에서 감염이 확인된 환자 관련 정보 출력
             	{
 					int Patient_num=0;//조건 만족하는 환자 수 
 					char input_place[100];//입력받은 장소이름 
@@ -135,7 +135,7 @@ int main(int argc, const char * argv[]) {
 						
 					}
 			        
-			        printf("\nThere are %d patient detected in %s\n",Patient_num,entry_place);
+			        printf("\nThere are %d patient detected in %s\n",Patient_num,input_place);
 				}
 			
 			        
@@ -145,7 +145,7 @@ int main(int argc, const char * argv[]) {
                 
                 break;
                 
-            case MENU_AGE:
+            case MENU_AGE://특정 범위의 나이에 해당하는 환자 관련 정보 출력
             		
 				{
 					
@@ -178,37 +178,37 @@ int main(int argc, const char * argv[]) {
 					
                 break;
                 
-            case MENU_TRACK:
+            case MENU_TRACK://감염 경로 및 최초 전파자 추적
             	
             {
            	
-           		int isMet(int Patient,int Propagator)//현재환자와 대상환자가 만난시점 계산 함수 
+           		int isMet(int Current_Patient,int Target_Patient)//현재환자와 대상환자가 만난시점 계산 함수 
                 {
 	                int i,j;//for문 돌릴 변수 
 					int place_i;//현재환자의 i번째 이동장소 
 					int place_j;// 대상환자의 j번째 장소
-					int dtime_Patient,dtime_Propagator;//(dtime=dtectedtime)현재환자,대상환자 감염 시점 
-					int meet_time=-1,time;
+					int dtime_CP,dtime_TP;//(dtime=dtectedtime),(C=Current),(T=Target),(P=Patient) 현재환자,대상환자 감염 시점 
+					int meet_time=-1,time_i;
 					
 					for (i=0;i<N_HISTORY;i++)
 					{
-					    ifct_element=ifctdb_getData(Patient);//현재환자 정보 불러옴 
-						a = ifctele_getinfestedTime(ifct_element);//현재환자 감염시점 불러옴 
-						time = a-(N_HISTORY-(i+1));//i번째 시점계산 
+					    ifct_element=ifctdb_getData(Current_Patient);//현재환자 정보 불러옴 
+						dtime_CP = ifctele_getinfestedTime(ifct_element);//현재환자 감염시점 불러옴 
+						time_i= dtime_CP-(N_HISTORY-(i+1));//i번째 시점계산 
 						place_i=ifctele_getHistPlaceIndex(ifct_element,i);//i번째 이동 장소
 	    
-	    			    ifct_element=ifctdb_getData(Propagator);// 대상 환자 정보 불러옴
-						b=ifctele_getinfestedTime(ifct_element);//대상 환자 감염시점 불러옴 
+	    			    ifct_element=ifctdb_getData(Target_Patient);// 대상 환자 정보 불러옴
+						dtime_TP=ifctele_getinfestedTime(ifct_element);//대상 환자 감염시점 불러옴 
 			
 		                for(j=N_HISTORY-2;j<N_HISTORY;j++) 
                         {
-				            if(time==b-(N_HISTORY-(j+1)))//현재환자와 대상환자 j번째에서 만남 
+				            if(time_i==dtime_TP-(N_HISTORY-(j+1)))//현재환자와 대상환자 j번째에서 만남 
 							{
 					            place_j=ifctele_getHistPlaceIndex(ifct_element,j);// 대상환자의 j번째 장소 
 				
 				                if (place_i == place_j)//현재환자와 대상환자가 같은 공간에 있음 
 				                {
-                                    meet_time = time;
+                                    meet_time = time_i;
                                 }
                             }
 				        }	
@@ -223,12 +223,13 @@ int main(int argc, const char * argv[]) {
 				int trackInfester(int patient_no)
                 {
    
-                    int met_time,Propagator=-1;
+                    int met_time; 
+					int Propagator=-1;
                     int i;
                     
-					for (i=0;i<ifctdb_len();i++)
+					for (i=0;i<ifctdb_len();i++)//환자수 만큼 반복 
 					{
-						if(i!=patient_no)
+						if(i!=patient_no)//현재환자와 대상환자가 다를때 
 						{
                             met_time = isMet(patient_no,i);
                             if ( met_time > 0) //만났다면
@@ -251,7 +252,7 @@ int main(int argc, const char * argv[]) {
                 	ifct_element=ifctdb_getData(Patient); //환자 정보 불러오기 
 					
 					ifctele_getHistPlaceIndex(ifct_element, N_HISTORY-(ifctele_getinfestedTime(ifct_element)-min_metTime+1));
-                	//N_HISTORY-(ifctele_getinfestedTime(ifct_element)-min_metTime+1=감염 날짜가 몇번째 이동장소인지 계산 
+                	//N_HISTORY-(ifctele_getinfestedTime(ifct_element)-min_metTime+1 = 감염 날짜가 몇번째 이동장소인지 계산 
 				}
                 
             	
@@ -270,18 +271,19 @@ int main(int argc, const char * argv[]) {
                     
 					if (Propagator>-1)//전파자가 존재하면 
                     printf("--> [TRACKING] patient %d is infected by %d(time : %d, place : %s)\n",Current_Patient,Propagator,min_metTime,ifctele_getPlaceName(Met_place(Current_Patient)));//전파자,감염시점,감염장소 출력 
-								
+						
+						
                     
-					else
+					else//전파자 존재하지 않으면 
                     {
                     	First_Preachers = Current_Patient;
-						if(track_ID==First_Preachers)
+						if(track_ID==First_Preachers)//조사한  환자가 첫번째 전파자면 
 						printf("\n%d is the first infecter!!!\n",track_ID,First_Preachers);
-						else
+						else//조사한 환자가 첫번재 전파자가 아니면 
 						printf("\nThe infecter of %d is %d\n",track_ID,First_Preachers);
 					}
 					
-					Current_Patient = Propagator;		                    			
+					Current_Patient = Propagator;//전파자를 현재환자로 설정하여 track 반복	ㅐ	                    			
                 }		
 			}	
 			            					                    
