@@ -33,13 +33,13 @@ int main(int argc, const char * argv[]) {
     
    
    
-	int i,j;
+	int i;//for문 돌릴 변수 
 	int menu_selection;
 	void *ifct_element;    
-	int pIndex, age, time;
-	int placeHist[N_HISTORY];
+	int pIndex, age, time;//환자 번호, 환자 나이, 감염 시점 
+	int placeHist[N_HISTORY];// 환자 이동 장소 
 	FILE*fp;
-	fp = fopen("patientInfo_prb5.txt","r");
+	fp = fopen("patientInfo_prb5.txt","r");//txt 파일 열기 
 
 
 
@@ -283,7 +283,7 @@ int main(int argc, const char * argv[]) {
 						printf("\nThe infecter of %d is %d\n",track_ID,First_Preachers);
 					}
 					
-					Current_Patient = Propagator;//전파자를 현재환자로 설정하여 track 반복	ㅐ	                    			
+					Current_Patient = Propagator;//전파자를 현재환자로 설정하여 track 반복	                    			
                 }		
 			}	
 			            					                    

@@ -106,10 +106,10 @@ char* ifctele_getPlaceName(int placeIndex)//환자 이동장소(숫자) 문자열로 변환
 typedef struct ifs_ele//구조체 형성 
 {
 	
-	int      index;
-	int      age;
-	int      detected_time;
-	place_t  place[N_HISTORY];
+	int      index;//환자 번호 
+	int      age;//환자 나이 
+	int      detected_time;//감염 시점  
+	place_t  place[N_HISTORY];//이동 장소 
 	 
 } ifs_ele_t;
 
@@ -119,13 +119,13 @@ void* ifctele_genElement(int index, int age, unsigned int detected_time, int his
 {
 	ifs_ele_t* ptr;
 	
-	int i;
+	int i;//for문 돌릴 변수 
 	ptr = (ifs_ele_t*)malloc(sizeof(ifs_ele_t));
     ptr->index = index;
 	ptr->age=age;
 	ptr->detected_time=detected_time;
 	
-	for(i=0;i<N_HISTORY;i++)
+	for(i=0;i<N_HISTORY;i++)//장소 수 만큼 반복 
 	{
 		ptr->place[i]=history_place[i];
 	}
@@ -157,15 +157,15 @@ int ifctele_getHistPlaceIndex(void* obj, int index)//환자 index번째 이동 장소 불
 	return(ptr->place[index]);
 	
 }
-
+ 
 
 void ifsele_printElement(void*obj)//환자 정보 출력하기 
 {
 	int i;
 	ifs_ele_t* ptr = (ifs_ele_t*)obj;
 	
-	printf("Patient age : %i\n",ptr->age);
-	printf("Detected time : %i\n",ptr->detected_time);
+	printf("Patient age : %i\n",ptr->age);//나이 출력 
+	printf("Detected time : %i\n",ptr->detected_time);//감염시점 출력 
 	
 	printf("Path History : ");
 	for(i=0;i<N_HISTORY;i++)//이동장소 수 만큼 반복 

@@ -222,4 +222,4 @@ void* ifctdb_getData(int index)
         printf("[ERROR] ifctdb_len() : there is no data of index %i\n", index);
     
     return obj;
-}
+} 
