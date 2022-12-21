@@ -22,11 +22,11 @@
 
 
 
-int isMet(int Patient,int Propagator);
+int isMet(int Patient,int Propagator);//현재환자와 대상환자가 만난시점 계산 함수 
 
-int trackInfester(int patient_no);
+int trackInfester(int patient_no);//감염자 찾기 함수 
 
-int Met_place(int Patient);
+int Met_place(int Patient);//감염 장소 계산 함수 
 
 
 int main(int argc, const char * argv[]) {
@@ -220,7 +220,7 @@ int main(int argc, const char * argv[]) {
 			
 				int min_metTime=10000;//가장 빨리 만난 시간 
 				
-				int trackInfester(int patient_no)
+				int trackInfester(int patient_no)//감염자 찾기 
                 {
    
                     int met_time; 
