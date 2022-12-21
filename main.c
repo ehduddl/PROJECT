@@ -161,6 +161,7 @@ int main(int argc, const char * argv[]) {
 	        		for(pIndex=0;pIndex<ifctdb_len();pIndex++)//환자수 만큼 반복 
 	        		{
 	        			ifct_element=ifctdb_getData(pIndex);//환자 정보 불러오기 
+						
 						if(ifctele_getAge(ifct_element)>=min_age&&ifctele_getAge(ifct_element)<=max_age)//환자 나이가 최솟값 보다 크고, 최댓값 보다 작으면 
 		        		{
 		        		    printf("\n--------[환자정보]-------\n");//환자정보 출력 
@@ -270,7 +271,7 @@ int main(int argc, const char * argv[]) {
                     Propagator = trackInfester(Current_Patient);
                     
 					if (Propagator>-1)//전파자가 존재하면 
-                    printf("--> [TRACKING] patient %d is infected by %d(time : %d, place : %s)\n",Current_Patient,Propagator,min_metTime,ifctele_getPlaceName(Met_place(Current_Patient)));//전파자,감염시점,감염장소 출력 
+                    	printf("--> [TRACKING] patient %d is infected by %d(time : %d, place : %s)\n",Current_Patient,Propagator,min_metTime,ifctele_getPlaceName(Met_place(Current_Patient)));//전파자,감염시점,감염장소 출력 
 						
 						
                     
@@ -278,9 +279,10 @@ int main(int argc, const char * argv[]) {
                     {
                     	First_Preachers = Current_Patient;
 						if(track_ID==First_Preachers)//조사한  환자가 첫번째 전파자면 
-						printf("\n%d is the first infecter!!!\n",track_ID,First_Preachers);
+							printf("\n%d is the first infecter!!!\n",track_ID,First_Preachers);
+						
 						else//조사한 환자가 첫번재 전파자가 아니면 
-						printf("\nThe infecter of %d is %d\n",track_ID,First_Preachers);
+							printf("\nThe infecter of %d is %d\n",track_ID,First_Preachers);
 					}
 					
 					Current_Patient = Propagator;//전파자를 현재환자로 설정하여 track 반복	                    			
