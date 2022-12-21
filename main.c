@@ -98,83 +98,78 @@ int main(int argc, const char * argv[]) {
                 
             case MENU_PATIENT://특정 환자에 대한 정보 출력
             	
-            	{
-            		printf("\n조사할 환자를 선택하시오.");
-            		scanf("%d",&pIndex);
-            		
-            		ifct_element=ifctdb_getData(pIndex);//입력받은 환자정보 불러오기 
-            		
-					printf("\n--------[환자정보]-------\n"); 
-            		printf("Patient index : %d\n",pIndex);
-					ifsele_printElement(ifct_element);//환자정보 출력
-					printf("\n-------------------------\n");
-			       	
-				}
+        	{
+        		printf("\n조사할 환자를 선택하시오.");
+        		scanf("%d",&pIndex);
+        		
+        		ifct_element=ifctdb_getData(pIndex);//입력받은 환자정보 불러오기 
+        		
+				printf("\n--------[환자정보]-------\n"); 
+        		printf("Patient index : %d\n",pIndex);
+				ifsele_printElement(ifct_element);//환자정보 출력
+				printf("\n-------------------------\n");
+		       	
+			}
             	
                 break;
                 
             case MENU_PLACE://특정 장소에서 감염이 확인된 환자 관련 정보 출력
-            	{
-					int Patient_num=0;//조건 만족하는 환자 수 
-					char input_place[100];//입력받은 장소이름 
-			        printf("\n장소이름을 입력하시오: ");
-			        scanf("%s",&input_place);
-			        
-			        for(pIndex=0;pIndex<ifctdb_len();pIndex++)//환자수 만큼 반복 
+        	{
+				int Patient_num=0;//조건 만족하는 환자 수 
+				char input_place[100];//입력받은 장소이름 
+		        printf("\n장소이름을 입력하시오: ");
+		        scanf("%s",&input_place);
+		        
+		        for(pIndex=0;pIndex<ifctdb_len();pIndex++)//환자수 만큼 반복 
+        		{
+        			ifct_element=ifctdb_getData(pIndex);//환자정보 불러오기 
+        	
+				    if (strcmp(input_place,ifctele_getPlaceName(ifctele_getHistPlaceIndex(ifct_element,N_HISTORY-1)))==0) //입력받은 장소와 환자가 감염된 장소가 같은지 비교 
             		{
-            			ifct_element=ifctdb_getData(pIndex);//환자정보 불러오기 
-            	
-					    if (strcmp(input_place,ifctele_getPlaceName(ifctele_getHistPlaceIndex(ifct_element,N_HISTORY-1)))==0) //입력받은 장소와 환자가 감염된 장소가 같은지 비교 
-	            		{
-	            			printf("\n--------[환자정보]-------\n");//같으면 환자정보 출력 
-	            		    printf("Patient index : %d\n",pIndex);
-							ifsele_printElement(ifct_element);
-							printf("\n-------------------------\n");
-							Patient_num++; 
-						}
-						
+            			printf("\n--------[환자정보]-------\n");//같으면 환자정보 출력 
+            		    printf("Patient index : %d\n",pIndex);
+						ifsele_printElement(ifct_element);
+						printf("\n-------------------------\n");
+						Patient_num++; 
 					}
-			        
-			        printf("\nThere are %d patient detected in %s\n",Patient_num,input_place);
+					
 				}
+		        
+		        printf("\nThere are %d patient detected in %s\n",Patient_num,input_place);
+			}
 			
-			        
-
-				
-            	
-                
                 break;
                 
             case MENU_AGE://특정 범위의 나이에 해당하는 환자 관련 정보 출력
             		
-				{
+			{
+				
+				int max_age, min_age;//입력받을 최대,최소 나이 
+				int Patient_num=0; //조건 만족하는 환자 수 
+				
+				printf("\n최소나이를 입력하시오.");
+				scanf("%d",&min_age);
+        		
+				printf("\n최대나이를 입력하시오.");
+        		scanf("%d",&max_age);
+        		
+        		for(pIndex=0;pIndex<ifctdb_len();pIndex++)//환자수 만큼 반복 
+        		{
+        			ifct_element=ifctdb_getData(pIndex);//환자 정보 불러오기 
 					
-					int max_age, min_age;//입력받을 최대,최소 나이 
-					int Patient_num=0; //조건 만족하는 환자 수 
-					
-					printf("\n최소나이를 입력하시오.");
-					scanf("%d",&min_age);
-	        		
-					printf("\n최대나이를 입력하시오.");
-	        		scanf("%d",&max_age);
-	        		
-	        		for(pIndex=0;pIndex<ifctdb_len();pIndex++)//환자수 만큼 반복 
+					if(ifctele_getAge(ifct_element)>=min_age&&ifctele_getAge(ifct_element)<=max_age)//환자 나이가 최솟값 보다 크고, 최댓값 보다 작으면 
 	        		{
-	        			ifct_element=ifctdb_getData(pIndex);//환자 정보 불러오기 
+	        		    printf("\n--------[환자정보]-------\n");//환자정보 출력 
+	        		    printf("Patient index : %d\n",pIndex);
+						ifsele_printElement(ifct_element);
+						printf("\n-------------------------\n");
 						
-						if(ifctele_getAge(ifct_element)>=min_age&&ifctele_getAge(ifct_element)<=max_age)//환자 나이가 최솟값 보다 크고, 최댓값 보다 작으면 
-		        		{
-		        		    printf("\n--------[환자정보]-------\n");//환자정보 출력 
-		        		    printf("Patient index : %d\n",pIndex);
-							ifsele_printElement(ifct_element);
-							printf("\n-------------------------\n");
-							
-							Patient_num++;
-						}
-					
+						Patient_num++;
 					}
-					printf("\nThere are %d whose age is between %d and %d\n",Patient_num,min_age,max_age);
+				
 				}
+				printf("\nThere are %d whose age is between %d and %d\n",Patient_num,min_age,max_age);
+			}
 				
 					
                 break;
